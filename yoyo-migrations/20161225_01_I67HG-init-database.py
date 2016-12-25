@@ -9,10 +9,8 @@ __depends__ = {}
 steps = [
     step(
         "CREATE TABLE links ( "
-        "  id INT, "
-        "  hash INT, "
-        "  rnd INT, "
-        "  longUrl VARCHAR(255), "
+        "  id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+        "  long_url VARCHAR(255), "
         "  PRIMARY KEY (id) "
         ")",
         "DROP TABLE links",

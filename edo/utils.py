@@ -1,19 +1,19 @@
 import string
 
-import pyhash
-
 BASE64_ALPHABET = string.ascii_uppercase + string.ascii_lowercase + string.digits + '-_'
-
-hasher = pyhash.murmur3_32()
-
-
-def hash30(s):
-    return hasher(s) & 0x3fffffff
+BASE64_ALPHABET_REVERSE = {c: i for i, c in enumerate(BASE64_ALPHABET)}
 
 
-def int30_to_b64(n):
+def int_to_b64(n):
     s = []
-    for i in range(5):
+    while n:
         n, r = divmod(n, 64)
         s.append(BASE64_ALPHABET[r])
     return ''.join(s)
+
+
+def b64_to_int(s):
+    n = 0
+    for c in s:
+        n = n * 64 + BASE64_ALPHABET_REVERSE[c]
+    return n

@@ -1,14 +1,31 @@
+from flask_sqlalchemy import SQLAlchemy
+
 from . import app
-from .utils import hash30, int30_to_b64
+from .utils import int_to_b64, b64_to_int
+
+db = SQLAlchemy(app)
 
 
-class Link:
-    def __init__(self, hashstr):
-        self.url = 'http://{}/{}'.format(app.config['DOMAIN'], hashstr)
+class Link(db.Model):
+    __tablename__ = 'links'
+
+    id = db.Column(db.Integer, primary_key=True)
+    long_url = db.Column(db.String(255))
+
+    @property
+    def url(self):
+        return 'http://{}/{}'.format(app.config['DOMAIN'], int_to_b64(self.id))
 
     @classmethod
     def shorten(cls, long_url):
         """Shorten a long url, return a Link object."""
-        hashint = hash30(long_url)
-        hashstr = int30_to_b64(hashint)
-        return cls(hashstr)
+        link = cls(long_url=long_url)
+        db.session.add(link)
+        db.session.commit()
+        return link
+
+    @classmethod
+    def get_by_hash(cls, linkhash):
+        id = b64_to_int(linkhash)
+        link = cls.query.filter_by(id=id).first()
+        return link
