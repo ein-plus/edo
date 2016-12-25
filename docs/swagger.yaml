@@ -19,18 +19,18 @@ paths:
           schema:
             type: object
             properties:
-              longUrl:
+              long_url:
                 type: string
                 description: Full URL
             required:
-              - longUrl
+              - long_url
       responses:
         200:
           description: Successfully generated an short url.
           schema:
             type: object
             properties:
-              url:
+              link:
                 type: string
                 description: Shortened URL
 
