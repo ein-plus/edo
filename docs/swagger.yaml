@@ -1,0 +1,109 @@
+swagger: '2.0'
+info:
+  title: Ein Shorten URL Service
+  version: "1.0.0"
+host: s.einplus.cn
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /
+produces:
+  - application/json
+paths:
+  /api/shorten:
+    post:
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              longUrl:
+                type: string
+                description: Full URL
+            required:
+              - longUrl
+      responses:
+        200:
+          description: Successfully generated an short url.
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                description: Shortened URL
+
+  /api/shorten-batch:
+    post:
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              longUrls:
+                type: array
+                items:
+                  type: string
+                  description: Full URL
+            required:
+              - longUrls
+      responses:
+        200:
+          description: Successfully generated short URLs.
+          schema:
+            type: object
+            properties:
+              urls:
+                type: array
+                items:
+                  type: string
+                  description: Full URL
+                  
+  /{hash}/{channel}:
+    get:
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          description: generated short URL's hash part
+          type: string
+        - name: channel
+          in: path
+          required: false
+          description: id of distribution channel
+          type: string
+      responses:
+        302:
+          description: Redirect to the full URL
+          
+  /api/link/clicks/{hash}:
+    get:
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          description: hash part of a short URL
+          type: string
+      responses:
+        200:
+          description: Click data for a given short URL
+          schema:
+            type: object
+            properties:
+              channels:
+                type: object
+                patternProperties:
+                  "^(.*)$":
+                    description: click data for a given channel
+                    type: object
+                    properties:
+                      clicks:
+                        type: integer
+              total:
+                type: object
+                properties:
+                  clicks:
+                    type: integer
+          
