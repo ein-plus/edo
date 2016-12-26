@@ -11,7 +11,7 @@ build:
     - python3.5 setup.py develop
 
 web:
-  cmd: ./run
+  cmd: ./run.sh
   port: 8000
   memory: 256M
   secret_files:
