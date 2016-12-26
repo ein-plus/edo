@@ -28,7 +28,7 @@ def test_shorten(client):
     url = urlsplit(resp['link'])
     assert url.scheme == 'http'
     assert url.netloc == edo.app.config['DOMAIN']
-    assert len(url.path) <= 6
+    assert len(url.path) == 6
 
 
 def test_batch_shorten(client):
