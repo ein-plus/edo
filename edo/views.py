@@ -27,8 +27,9 @@ def shorten_batch():
     return jsonify(resp)
 
 
-@app.route('/<linkhash>')
-def visit(linkhash):
+@app.route('/<linkhash>', defaults={'channel': None})
+@app.route('/<linkhash>/<channel>')
+def visit(linkhash, channel):
     link = Link.get_by_hash(linkhash)
     if not link:
         abort(404)
