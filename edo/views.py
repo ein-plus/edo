@@ -30,4 +30,13 @@ def visit(linkhash, channel):
     if not link:
         abort(404)
 
+    # TODO: record click
+
     return redirect(link.long_url)
+
+
+@app.route('/api/link/clicks/<linkhash>')
+def get_clicks(linkhash):
+    # FIXME: fetch real metrics
+    resp = {'channels': {}, 'total': {'clicks': 0}}
+    return jsonify(resp)

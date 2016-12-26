@@ -59,3 +59,13 @@ def test_link_with_channel_should_redirect_to_long_url(client):
     rv = client.get(path)
     assert rv.status_code == 302
     assert rv.headers['Location'] == 'http://www.example.com'
+
+
+def test_get_clicks_api(client):
+    resp = shorten(client, 'http://www.example.com')
+    url = urlsplit(resp['link'])
+    linkhash = url.path.split('/')[-1]
+
+    rv = client.get('/api/link/clicks/{}'.format(linkhash))
+    resp = json.loads(rv.data)
+    assert resp == {'channels': {}, 'total': {'clicks': 0}}
