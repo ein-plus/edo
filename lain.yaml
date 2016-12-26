@@ -19,3 +19,5 @@ web:
   logs:
     - gunicorn.access.log
     - gunicorn.stderr.log
+  mountpoint:
+    - s.einplus.cn
