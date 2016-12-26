@@ -1,0 +1,23 @@
+appname: edo
+
+build:
+  base: registry.lain.ein.plus/einplus/centos-base:bavel-0.1
+  prepare:
+    version: hongqn20161226
+    script:
+      - pip3.5 install --exists-action=w -r requirements.txt --index-url https://pypi.doubanio.com/simple
+  script:
+    - pip3.5 install --exists-action=w -r requirements.txt --index-url https://pypi.doubanio.com/simple
+    - python3.5 setup.py develop
+
+web:
+  cmd: ./run.sh
+  port: 8000
+  memory: 256M
+  secret_files:
+    - /lain/app/secrets.yaml
+  logs:
+    - gunicorn.access.log
+    - gunicorn.stderr.log
+  mountpoint:
+    - s.einplus.cn
