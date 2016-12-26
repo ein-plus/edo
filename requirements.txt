@@ -1,6 +1,8 @@
 click==6.6
 Flask==0.12
 Flask-SQLAlchemy==2.1
+gevent==1.2.0
+greenlet==0.4.11
 gunicorn==19.6.0
 iniherit==0.3.6
 itsdangerous==0.24
