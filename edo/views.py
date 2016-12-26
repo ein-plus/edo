@@ -30,7 +30,11 @@ def visit(linkhash, channel):
     if not link:
         abort(404)
 
-    Click.record(link, channel)
+    try:
+        Click.record(link, channel)
+    except Exception:
+        # Do not break redirection
+        app.logger.exception("Failed when recording click")
 
     return redirect(link.long_url)
 
