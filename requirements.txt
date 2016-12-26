@@ -1,12 +1,13 @@
 click==6.6
 Flask==0.12
 Flask-SQLAlchemy==2.1
+gunicorn==19.6.0
 iniherit==0.3.6
 itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
+mmh3==2.3.1
 py==1.4.32
-pyhash==0.6.3
 PyMySQL==0.7.9
 pytest==3.0.5
 python-slugify==1.2.1

@@ -1,11 +1,10 @@
 import string
 
-import pyhash
+import mmh3
 
 BASE64_ALPHABET = string.ascii_uppercase + string.ascii_lowercase + string.digits + '-_'
 BASE64_ALPHABET_REVERSE = {c: i for i, c in enumerate(BASE64_ALPHABET)}
 
-hasher = pyhash.murmur3_32()
 
 
 def int_to_b64(n):
@@ -26,4 +25,4 @@ def b64_to_int(s):
 
 def hash30(s):
     """Hash string to a 30-bit unsigned integer."""
-    return hasher(s) & 0x3fffffff
+    return mmh3.hash(s) & 0x3fffffff
