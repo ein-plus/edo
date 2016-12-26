@@ -37,3 +37,16 @@ def test_link_should_redirect_to_long_url(client):
     rv = client.get(url.path)
     assert rv.status_code == 302
     assert rv.headers['Location'] == 'http://www.example.com'
+
+
+def test_batch_shorten(client):
+    rv = post_json(
+        client, '/api/shorten-batch',
+        {'long_urls': [
+            'http://www.example.com/1',
+            'http://www.example.com/2',
+        ]})
+    assert rv.status_code == 200
+    resp = json.loads(rv.data)
+    assert len(resp['links']) == 2
+    assert all(urlsplit(l).netloc == edo.app.config['DOMAIN'] for l in resp['links'])

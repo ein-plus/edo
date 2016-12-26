@@ -17,11 +17,12 @@ class Link(db.Model):
         return 'http://{}/{}'.format(app.config['DOMAIN'], int_to_b64(self.id))
 
     @classmethod
-    def shorten(cls, long_url):
+    def shorten(cls, long_url, commit=True):
         """Shorten a long url, return a Link object."""
         link = cls(long_url=long_url)
         db.session.add(link)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         return link
 
     @classmethod
