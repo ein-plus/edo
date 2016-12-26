@@ -7,12 +7,20 @@ BASE64_ALPHABET_REVERSE = {c: i for i, c in enumerate(BASE64_ALPHABET)}
 
 
 
-def int_to_b64(n):
+def int30_to_b64(n):
     s = []
     for i in range(5):
         n, r = divmod(n, 64)
         s.append(BASE64_ALPHABET[r])
     assert n == 0
+    return ''.join(reversed(s))
+
+
+def int_to_b64(n):
+    s = []
+    while n:
+        n, r = divmod(n, 64)
+        s.append(BASE64_ALPHABET[r])
     return ''.join(reversed(s))
 
 

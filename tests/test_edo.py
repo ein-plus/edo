@@ -62,10 +62,60 @@ def test_link_with_channel_should_redirect_to_long_url(client):
 
 
 def test_get_clicks_api(client):
-    resp = shorten(client, 'http://www.example.com')
-    url = urlsplit(resp['link'])
-    linkhash = url.path.split('/')[-1]
+    resp1 = shorten(client, 'http://www.example.com/1')
+    url1 = urlsplit(resp1['link'])
+    linkhash1 = url1.path.split('/')[-1]
 
-    rv = client.get('/api/link/clicks/{}'.format(linkhash))
+    resp2 = shorten(client, 'http://www.example.com/2')
+    url2 = urlsplit(resp2['link'])
+    linkhash2 = url2.path.split('/')[-1]
+
+    rv = client.get('/api/link/clicks/{}'.format(linkhash1))
     resp = json.loads(rv.data)
+    # no click info
     assert resp == {'channels': {}, 'total': {'clicks': 0}}
+
+    # visit without channel
+    client.get(url1.path)
+
+    # visit with ch1 for 2 times
+    client.get(url1.path + '/ch1')
+    client.get(url1.path + '/ch1')
+
+    # visit with ch2 for 1 time
+    client.get(url1.path + '/ch2')
+
+    # visit url2
+    client.get(url2.path + '/ch1')
+
+    rv = client.get('/api/link/clicks/' + linkhash1)
+    resp = json.loads(rv.data)
+    assert resp == {
+        'channels': {
+            '': {
+                'clicks': 1,
+            },
+            'ch1': {
+                'clicks': 2,
+            },
+            'ch2': {
+                'clicks': 1,
+            },
+        },
+        'total': {
+            'clicks': 4,
+        },
+    }
+
+    rv = client.get('/api/link/clicks/' + linkhash2)
+    resp = json.loads(rv.data)
+    assert resp == {
+        'channels': {
+            'ch1': {
+                'clicks': 1,
+            },
+        },
+        'total': {
+            'clicks': 1,
+        },
+    }
